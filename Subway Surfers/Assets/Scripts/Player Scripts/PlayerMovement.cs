@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security;
+using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -14,68 +17,70 @@ public class PlayerMovement : MonoBehaviour
     public GameObject groundCheckObject;
     public float barrelRollLength = 1f;
     public float maxVelocity;
+    public bool isSwiping;
+    public Animator playerAnimator;
+    public LayerMask groundLayer;
+    private bool isScrolling;
 
     private void Start()
     {
         currentPosition = 1;
-    }
-
-    private void Update()
-    {
-        //playerRigidbody.MovePosition(transform.position + Vector3.forward);
-        if (Input.GetMouseButtonDown(0))
-        {
-            MovePosition(-1);
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            MovePosition(1);
-        }
-        Jump();
-        Crouch();
+        StartCoroutine(IncreaseSpeed());
     }
 
     private void FixedUpdate()
     {
-        float speedFactor = (maxVelocity -  playerRigidbody.velocity.magnitude) / maxVelocity;
+        float speedFactor = (maxVelocity - playerRigidbody.velocity.magnitude) / maxVelocity;
         playerRigidbody.AddForce(speedFactor * velocity * Vector3.forward, ForceMode.Impulse);
+        GroundCheck();
     }
 
-    private void Crouch()
+    public void Crouch()
     {
-        if (Input.GetKey(KeyCode.LeftCommand) && isGrounded)
-        {
-            StartCoroutine(BarrelRoll());
-        }
+        StartCoroutine(BarrelRoll());
     }
-    
+
     private IEnumerator BarrelRoll()
     {
-        transform.GetComponent<CapsuleCollider>().height = 0.5f;
+        isScrolling = true;
+        playerAnimator.SetBool("isJumping", false);
+        CapsuleCollider capsuleCollider = transform.GetComponent<CapsuleCollider>();
+        playerAnimator.SetBool("isScrolling", true);
+        playerRigidbody.AddForce(Vector3.down * 5, ForceMode.Impulse);
+        capsuleCollider.height = 0.5f;
+        capsuleCollider.center = new Vector3(0, 0.25f, 0);
         yield return new WaitForSeconds(barrelRollLength);
-        transform.GetComponent<CapsuleCollider>().height = 1f;
+        capsuleCollider.height = 1f;
+        capsuleCollider.center = new Vector3(0.05f, 0.50f, 0.02f);
+        playerAnimator.SetBool("isScrolling", false);
+        isScrolling = false;
     }
-    
-    private void Jump()
+
+    public void Jump()
     {
         GroundCheck();
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (isGrounded)
         {
-            //jde to is add force jen se musí dát mnohem větší hodnota
-            playerRigidbody.AddForce(Vector3.up * jumpHeight);
+            StartCoroutine(JumpAnimation());
         }
     }
 
+    private IEnumerator JumpAnimation()
+    {
+        playerAnimator.SetBool("isJumping", true);
+        playerRigidbody.AddForce(Vector3.up * jumpHeight);
+        yield return new WaitForSeconds(0.5f);
+        yield return new WaitUntil(() => isGrounded);
+        playerAnimator.SetBool("isJumping", false);
+    }
 
-    private void GroundCheck()
+
+    public void GroundCheck()
     {
         RaycastHit hit;
-        if (Physics.Raycast(groundCheckObject.transform.position, Vector3.down, out hit, 1f))
+        if (Physics.Raycast(groundCheckObject.transform.position, Vector3.down, out hit, 0.2f, groundLayer))
         {
-            if (hit.collider.gameObject.tag == "Ground")
-            {
-                isGrounded = true;
-            }
+            isGrounded = true;
         }
         else
         {
@@ -83,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePosition(int move)
+    public void MovePosition(int move)
     {
         if (currentPosition + move < 0)
         {
@@ -95,9 +100,34 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            transform.position = new Vector3(trailsList[currentPosition + move].position.x, transform.position.y,
-                transform.position.z);
-            currentPosition+=move;
+            StartCoroutine(VerticalMove(move));
         }
+    }
+
+    private IEnumerator VerticalMove(int move)
+    {
+        if (move == 1)
+        {
+            playerAnimator.SetBool("goingRight", true);
+        }
+        else if (move == -1)
+        {
+            playerAnimator.SetBool("goingLeft", true);
+        }
+
+        isSwiping = true;
+        transform.DOMoveX(trailsList[currentPosition + move].position.x, 0.5f);
+        currentPosition += move;
+        yield return new WaitForSeconds(0.5f);
+        isSwiping = false;
+        playerAnimator.SetBool("goingLeft", false);
+        playerAnimator.SetBool("goingRight", false);
+    }
+
+    private IEnumerator IncreaseSpeed()
+    {
+        yield return new WaitForSeconds(10f);
+        maxVelocity += 2f;
+        StartCoroutine(IncreaseSpeed());
     }
 }
