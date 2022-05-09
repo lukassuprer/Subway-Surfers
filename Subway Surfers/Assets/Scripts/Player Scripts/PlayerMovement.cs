@@ -20,12 +20,13 @@ public class PlayerMovement : MonoBehaviour
     public bool isSwiping;
     public Animator playerAnimator;
     public LayerMask groundLayer;
-    private bool isScrolling;
+    private DeathManager deathManager;
 
     private void Start()
     {
         currentPosition = 1;
         StartCoroutine(IncreaseSpeed());
+        deathManager = FindObjectOfType<DeathManager>();
     }
 
     private void FixedUpdate()
@@ -42,7 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator BarrelRoll()
     {
-        isScrolling = true;
         playerAnimator.SetBool("isJumping", false);
         CapsuleCollider capsuleCollider = transform.GetComponent<CapsuleCollider>();
         playerAnimator.SetBool("isScrolling", true);
@@ -53,7 +53,6 @@ public class PlayerMovement : MonoBehaviour
         capsuleCollider.height = 1f;
         capsuleCollider.center = new Vector3(0.05f, 0.50f, 0.02f);
         playerAnimator.SetBool("isScrolling", false);
-        isScrolling = false;
     }
 
     public void Jump()
@@ -129,5 +128,13 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(10f);
         maxVelocity += 2f;
         StartCoroutine(IncreaseSpeed());
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == 6)
+        {
+            deathManager.DeadState();
+        }
     }
 }

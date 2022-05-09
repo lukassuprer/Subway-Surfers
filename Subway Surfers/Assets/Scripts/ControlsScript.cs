@@ -11,12 +11,16 @@ public class ControlsScript : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 endPosition;
     public PlayerMovement playerMovement;
+    public LayerMask obstacleLayer;
+    private int obstaclesHit;
+    private DeathManager deathManager;
 
     private void Awake()
     {
         screenWidth = Screen.width;
         screenHeight = Screen.height;
         startPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        deathManager = FindObjectOfType<DeathManager>();
     }
 
     private void Update()
@@ -35,6 +39,7 @@ public class ControlsScript : MonoBehaviour
         }
 
         MouseMovement();
+        CheckForObstacles(Vector3.right);
     }
 
     private Vector3 GetTouchPos(Touch touch)
@@ -73,11 +78,32 @@ public class ControlsScript : MonoBehaviour
     {
         if (x > 0.2f)
         {
-            playerMovement.MovePosition(1);
+            if (CheckForObstacles(Vector3.right))
+            {
+                playerMovement.MovePosition(1);
+            }
+            else
+            {
+                obstaclesHit++;
+                playerMovement.isSwiping = true;
+            }
         }
         else if (x < -0.2f)
         {
-            playerMovement.MovePosition(-1);
+            if (CheckForObstacles(Vector3.left))
+            {
+                playerMovement.MovePosition(-1);
+            }
+            else
+            {
+                obstaclesHit++;
+                playerMovement.isSwiping = true;
+            }
+        }
+
+        if (obstaclesHit > 2)
+        {
+            deathManager.DeadState();
         }
 
         if (!playerMovement.isSwiping)
@@ -92,5 +118,11 @@ public class ControlsScript : MonoBehaviour
                 playerMovement.Crouch();
             }
         }
+        playerMovement.isSwiping = false;
+    }
+
+    private bool CheckForObstacles(Vector3 direction)
+    {
+        return !Physics.Raycast(playerMovement.transform.position, direction, 5f, obstacleLayer);
     }
 }
