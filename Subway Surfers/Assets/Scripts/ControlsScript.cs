@@ -14,6 +14,8 @@ public class ControlsScript : MonoBehaviour
     public LayerMask obstacleLayer;
     private int obstaclesHit;
     private DeathManager deathManager;
+    public float deadZone = 0.2f;
+    public AudioManager audioManager;
 
     private void Awake()
     {
@@ -76,10 +78,11 @@ public class ControlsScript : MonoBehaviour
 
     private void Move(float x, float y)
     {
-        if (x > 0.2f)
+        if (x > deadZone)
         {
             if (CheckForObstacles(Vector3.right))
             {
+                audioManager.Play("Swipe");
                 playerMovement.MovePosition(1);
             }
             else
@@ -88,10 +91,11 @@ public class ControlsScript : MonoBehaviour
                 playerMovement.isSwiping = true;
             }
         }
-        else if (x < -0.2f)
+        else if (x < -deadZone)
         {
             if (CheckForObstacles(Vector3.left))
             {
+                audioManager.Play("Swipe");
                 playerMovement.MovePosition(-1);
             }
             else
@@ -111,6 +115,7 @@ public class ControlsScript : MonoBehaviour
             playerMovement.GroundCheck();
             if (y > 0 && playerMovement.isGrounded)
             {
+                audioManager.Play("SwipeUp");
                 playerMovement.Jump();
             }
             else if (y < 0)

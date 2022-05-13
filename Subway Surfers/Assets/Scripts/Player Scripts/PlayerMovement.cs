@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     public Animator playerAnimator;
     public LayerMask groundLayer;
     private DeathManager deathManager;
+    public float changeTrailTime = 0.5f;
+    public float fallGravity = 5.0f;
 
     private void Start()
     {
@@ -35,6 +37,19 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.AddForce(speedFactor * velocity * Vector3.forward, ForceMode.Impulse);
         GroundCheck();
     }
+    bool highPt = false;
+    private void Update()
+    {
+        if(playerRigidbody.velocity.y < 0 && this.highPt == false)
+        {
+            this.highPt = true;
+            playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
+        }
+        if (isGrounded)
+        {
+            this.highPt = false;
+        }
+    }
 
     public void Crouch()
     {
@@ -46,9 +61,12 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool("isJumping", false);
         CapsuleCollider capsuleCollider = transform.GetComponent<CapsuleCollider>();
         playerAnimator.SetBool("isScrolling", true);
-        playerRigidbody.AddForce(Vector3.down * 5, ForceMode.Impulse);
+        if (!isGrounded)
+        {
+            playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
+        }
         capsuleCollider.height = 0.5f;
-        capsuleCollider.center = new Vector3(0, 0.25f, 0);
+        capsuleCollider.center = new Vector3(0, 0.22f, 0);
         yield return new WaitForSeconds(barrelRollLength);
         capsuleCollider.height = 1f;
         capsuleCollider.center = new Vector3(0.05f, 0.50f, 0.02f);
@@ -115,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         isSwiping = true;
-        transform.DOMoveX(trailsList[currentPosition + move].position.x, 0.5f);
+        transform.DOMoveX(trailsList[currentPosition + move].position.x, changeTrailTime);
         currentPosition += move;
         yield return new WaitForSeconds(0.5f);
         isSwiping = false;
