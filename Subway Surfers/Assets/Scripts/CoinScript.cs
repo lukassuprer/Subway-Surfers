@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinScript : MonoBehaviour
+public class CoinScript : MonoBehaviour, IPooledObject
 {
     [SerializeField] private Rigidbody rb;
     private CoinManager coinManager;
     private AudioManager audioManager;
 
-    private void Start()
+    public void OnObjectSpawn()
     {
         coinManager = FindObjectOfType<CoinManager>();
         audioManager = FindObjectOfType<AudioManager>();

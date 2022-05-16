@@ -304,9 +304,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6704b2543d44d46ab6b22077027424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObjects: []
-  objectToPool: {fileID: 3265554541959585590, guid: b1c353dd8bd6b497f88358bf1b2e6582, type: 3}
-  amountToPool: 20
+  pools:
+  - tag: Coins
+    prefab: {fileID: 3265554541959585590, guid: b1c353dd8bd6b497f88358bf1b2e6582, type: 3}
+    size: 20
 --- !u!4 &46631360
 Transform:
   m_ObjectHideFlags: 0

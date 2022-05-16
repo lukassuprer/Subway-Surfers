@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,25 +7,25 @@ public class CoinManager : MonoBehaviour
 {
     public int coinCount;
     public GameObject coinPrefab;
-    
-    void Start()
+    private ObjectPooler objectPooler;
+
+    public void Start()
     {
-        coinCount = 0;
-        for(int i = 0; i < ObjectPool.instance.amountToPool; i++)
+        objectPooler = ObjectPooler.Instance;
+    }
+
+    private void Update()
+    {
+        //random number if its between some numbers then run method to spawn random number of coins from position of player
+        if (UnityEngine.Random.Range(0, 100) < 1)
         {
             SpawnCoins();
         }
     }
-
-    private void SpawnCoins()
+    
+    public void SpawnCoins()
     {
-        coinPrefab = ObjectPool.instance.GetPooledObject();
-        if (coinPrefab != null)
-        {
-            coinPrefab.transform.position = transform.position;
-            coinPrefab.transform.rotation = transform.rotation;
-            coinPrefab.SetActive(true);
-        }
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
+        //spawn coins at player position
+        objectPooler.SpawnFromPool("Coins", transform.position, Quaternion.identity);
     }
 }
