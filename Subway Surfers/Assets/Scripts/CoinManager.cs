@@ -2,30 +2,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 public class CoinManager : MonoBehaviour
 {
     public int coinCount;
-    public GameObject coinPrefab;
     private ObjectPooler objectPooler;
+    public CoinSpawner[] SpawnPoint; 
 
     public void Start()
     {
         objectPooler = ObjectPooler.Instance;
+        //SpawnPoint = FindObjectsOfType(typeof(CoinSpawner)) as Transform[];
+        SpawnCoins();
     }
 
-    private void Update()
-    {
-        //random number if its between some numbers then run method to spawn random number of coins from position of player
-        if (UnityEngine.Random.Range(0, 100) < 1)
-        {
-            SpawnCoins();
-        }
-    }
-    
     public void SpawnCoins()
     {
+        SpawnPoint = (CoinSpawner[]) GameObject.FindObjectsOfType (typeof(CoinSpawner));
+
         //spawn coins at player position
-        objectPooler.SpawnFromPool("Coins", transform.position, Quaternion.identity);
+        foreach (CoinSpawner spawner in SpawnPoint)
+        {
+            objectPooler.SpawnFromPool("coin", spawner.transform.position, Quaternion.identity);
+        }
     }
 }

@@ -120,6 +120,7 @@ public class ControlsScript : MonoBehaviour
             }
             else if (y < 0)
             {
+                audioManager.Play("SwipeDown");
                 playerMovement.Crouch();
             }
         }

@@ -7,18 +7,18 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
-    public Sound[] sounds;
-    public Sound[] coinSounds;
+    public static AudioManager Instance;
+    public Sound[] Sounds;
+    public Sound[] CoinSounds;
     [SerializeField] private AudioMixer mixer;
     
     public const string MUSIC_KEY = "musicVolume";
     public const string SFX_KEY = "sfxVolume";
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             
             DontDestroyOnLoad(gameObject);
         }
@@ -26,8 +26,8 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        AttachValues(sounds);
-        AttachValues(coinSounds);
+        AttachValues(Sounds);
+        AttachValues(CoinSounds);
         LoadVolume();
     }
 
@@ -52,7 +52,7 @@ public class AudioManager : MonoBehaviour
 
     public void Play(string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
+        Sound s = Array.Find(Sounds, sound => sound.name == name);
         if (s == null)
         {
             Debug.LogWarning("Sound: " + name + " not found!");
@@ -62,8 +62,8 @@ public class AudioManager : MonoBehaviour
     }
     public void PlayCoinSound()
     {    
-        string name = coinSounds[(UnityEngine.Random.Range(0, coinSounds.Length - 1))].name;
-        Sound s = Array.Find(coinSounds, sound => sound.name == name);
+        string name = CoinSounds[(UnityEngine.Random.Range(0, CoinSounds.Length - 1))].name;
+        Sound s = Array.Find(CoinSounds, sound => sound.name == name);
         if (s == null)
         {
             Debug.LogWarning("Sound: " + name + " not found!");
