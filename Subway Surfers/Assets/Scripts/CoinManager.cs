@@ -10,7 +10,7 @@ public class CoinManager : MonoBehaviour
     private ObjectPooler objectPooler;
     public CoinSpawner[] SpawnPoint; 
 
-    public void Start()
+    /*public void Start()
     {
         objectPooler = ObjectPooler.Instance;
         //SpawnPoint = FindObjectsOfType(typeof(CoinSpawner)) as Transform[];
@@ -24,7 +24,7 @@ public class CoinManager : MonoBehaviour
         //spawn coins at player position
         foreach (CoinSpawner spawner in SpawnPoint)
         {
-            objectPooler.SpawnFromPool("coin", spawner.transform.position, Quaternion.identity);
+            objectPooler.SpawnFromPool("coin", spawner.transform.position, Quaternion.identity);    
         }
-    }
+    }*/
 }
