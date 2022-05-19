@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private DeathManager deathManager;
     public float changeTrailTime = 0.5f;
     public float fallGravity = 5.0f;
+    public LayerMask Obstacle;
 
     private void Start()
     {
@@ -37,18 +38,22 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.AddForce(speedFactor * velocity * Vector3.forward, ForceMode.Impulse);
         GroundCheck();
     }
+
     bool highPt = false;
+
     private void Update()
     {
-        if(playerRigidbody.velocity.y < 0 && this.highPt == false)
+        if (playerRigidbody.velocity.y < 0 && this.highPt == false)
         {
             this.highPt = true;
             playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
         }
+
         if (isGrounded)
         {
             this.highPt = false;
         }
+        HandleGravity();
     }
 
     public void Crouch()
@@ -65,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
         {
             playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
         }
+
         capsuleCollider.height = 0.5f;
         capsuleCollider.center = new Vector3(0, 0.22f, 0);
         yield return new WaitForSeconds(barrelRollLength);
@@ -99,11 +105,33 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
         }
+        else if (Physics.Raycast(groundCheckObject.transform.position, Vector3.down, out hit, 0.2f, Obstacle))
+        {
+            isGrounded = true;
+        }
         else
         {
             isGrounded = false;
         }
     }
+    
+    private void HandleGravity()
+    {
+        float currentVerticalSpeed = playerRigidbody.velocity.y;
+     
+        if(isGrounded)
+        {
+            if(currentVerticalSpeed < 0f)
+                currentVerticalSpeed = 0f;
+        }
+        else if(!isGrounded)
+        {
+            currentVerticalSpeed -= fallGravity * Time.deltaTime;
+        }
+     
+        playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x,currentVerticalSpeed,playerRigidbody.velocity.z);
+    }
+
 
     public void MovePosition(int move)
     {
@@ -150,9 +178,26 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Transform myTransform = collision.transform;
         if (collision.gameObject.layer == 6)
         {
-            deathManager.DeadState();
+            Vector3 normal = collision.contacts[0].normal;
+            if (normal == -(transform.forward))
+            {
+                Debug.Log("DEAD");
+                deathManager.DeadState();
+            }
+
+            else if (normal == transform.up)
+            {
+                Debug.Log("Not dead");
+                //deathManager.DeadState();
+            }
+            
+            else
+            {
+                return;
+            }
         }
     }
 }

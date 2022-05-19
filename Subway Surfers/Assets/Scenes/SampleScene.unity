@@ -157,7 +157,7 @@ MonoBehaviour:
   - {fileID: 926209543}
   - {fileID: 1921794061}
   currentPosition: 0
-  jumpHeight: 500
+  jumpHeight: 600
   isGrounded: 0
   groundCheckObject: {fileID: 1298016893}
   barrelRollLength: 1
@@ -168,7 +168,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   changeTrailTime: 0.5
-  fallGravity: 3
+  fallGravity: 7
+  Obstacle:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!54 &21894082
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -308,13 +311,13 @@ MonoBehaviour:
   - tag: coin
     prefabList:
     - {fileID: 3265554541959585590, guid: b1c353dd8bd6b497f88358bf1b2e6582, type: 3}
-    size: 50
+    size: 200
   - tag: tile
     prefabList:
     - {fileID: 1558626802483509233, guid: a230a83dd10ea479dbda5150a60a41ab, type: 3}
-    - {fileID: 1558626802483509233, guid: a230a83dd10ea479dbda5150a60a41ab, type: 3}
-    - {fileID: 1558626802483509233, guid: a230a83dd10ea479dbda5150a60a41ab, type: 3}
-    size: 6
+    - {fileID: 1558626802483509233, guid: 98708075f580e4dcc9b86380683a8904, type: 3}
+    - {fileID: 1558626802483509233, guid: 98708075f580e4dcc9b86380683a8904, type: 3}
+    size: 2
   ObjectToSpawn: {fileID: 0}
 --- !u!4 &46631360
 Transform:
