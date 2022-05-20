@@ -16,9 +16,11 @@ public class ControlsScript : MonoBehaviour
     private DeathManager deathManager;
     public float deadZone = 0.2f;
     public AudioManager audioManager;
+    private GameManager gameManager;
 
     private void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
         screenWidth = Screen.width;
         screenHeight = Screen.height;
         startPosition = new Vector3(0.0f, 0.0f, 0.0f);
@@ -27,7 +29,7 @@ public class ControlsScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && gameManager.GamePaused == false) 
         {
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
@@ -62,11 +64,11 @@ public class ControlsScript : MonoBehaviour
 
     private void MouseMovement()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && gameManager.GamePaused == false)
         {
             startPosition = GetMousePos();
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        else if (Input.GetKeyUp(KeyCode.Mouse0) && gameManager.GamePaused == false)
         {
             endPosition = GetMousePos();
 
@@ -78,7 +80,7 @@ public class ControlsScript : MonoBehaviour
 
     private void Move(float x, float y)
     {
-        if (x > deadZone)
+        if (x > deadZone && gameManager.GamePaused == false)
         {
             if (CheckForObstacles(Vector3.right))
             {
@@ -91,7 +93,7 @@ public class ControlsScript : MonoBehaviour
                 playerMovement.isSwiping = true;
             }
         }
-        else if (x < -deadZone)
+        else if (x < -deadZone && gameManager.GamePaused == false)
         {
             if (CheckForObstacles(Vector3.left))
             {
@@ -110,7 +112,7 @@ public class ControlsScript : MonoBehaviour
             deathManager.DeadState();
         }
 
-        if (!playerMovement.isSwiping)
+        if (!playerMovement.isSwiping && gameManager.GamePaused == false)
         {
             playerMovement.GroundCheck();
             if (y > 0 && playerMovement.isGrounded)
