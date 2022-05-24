@@ -26,9 +26,9 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        LoadVolume();
         AttachValues(Sounds);
         AttachValues(CoinSounds);
-        LoadVolume();
     }
 
     private void Start()
