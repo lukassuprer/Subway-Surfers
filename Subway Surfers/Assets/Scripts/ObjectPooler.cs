@@ -9,7 +9,9 @@ public class ObjectPooler : MonoBehaviour
     public class Pool
     {
         public string tag;
+
         public List<GameObject> prefabList = new List<GameObject>();
+
         //public GameObject prefab;
         public int size;
     }
@@ -18,11 +20,11 @@ public class ObjectPooler : MonoBehaviour
     public List<Pool> pools = new List<Pool>();
     public Dictionary<string, Queue<GameObject>> poolDictionary;
     public GameObject ObjectToSpawn;
-    
+
     void Awake()
     {
         Instance = this;
-        
+
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
         foreach (Pool pool in pools)
@@ -31,7 +33,7 @@ public class ObjectPooler : MonoBehaviour
 
             for (int i = 0; i < pool.size; i++)
             {
-                foreach (GameObject prefab in pool.prefabList)
+                foreach (GameObject prefab in RandomChilds(pool.prefabList))
                 {
                     GameObject obj = Instantiate(prefab, transform);
                     obj.SetActive(false);
@@ -42,27 +44,17 @@ public class ObjectPooler : MonoBehaviour
             poolDictionary.Add(pool.tag, objectPool);
         }
     }
-    /*private void Start()
+
+    GameObject[] RandomChilds(List<GameObject> list)
     {
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
-
-        foreach (Pool pool in pools)
+        GameObject[] array = list.ToArray();
+        for (int i = 0; i < list.Count; i++) 
         {
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-
-            for (int i = 0; i < pool.size; i++)
-            {
-                foreach (GameObject prefab in pool.prefabList)
-                {
-                    GameObject obj = Instantiate(prefab, transform);
-                    obj.SetActive(false);
-                    objectPool.Enqueue(obj);
-                }
-            }
-
-            poolDictionary.Add(pool.tag, objectPool);
+            int rand = UnityEngine.Random.Range (0, list.Count);
+            (array[rand], array[i]) = (array[i], array[rand]);
         }
-    }*/
+        return array;
+    }
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
@@ -80,12 +72,12 @@ public class ObjectPooler : MonoBehaviour
         objectToSpawn.transform.rotation = rotation;
 
         IPooledObject pooledObj = objectToSpawn.GetComponent<IPooledObject>();
-        
+
         if (pooledObj != null)
         {
             pooledObj.OnObjectSpawn();
         }
-        
+
         poolDictionary[tag].Enqueue(objectToSpawn);
         return objectToSpawn;
     }

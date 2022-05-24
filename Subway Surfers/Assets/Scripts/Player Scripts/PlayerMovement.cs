@@ -178,26 +178,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Transform myTransform = collision.transform;
-        if (collision.gameObject.layer == 6)
+        if (collision.gameObject.layer != 6) return;
+        Vector3 normal = collision.contacts[0].normal;
+        normal = new Vector3(Mathf.Round(normal.x), Mathf.Round(normal.y), Mathf.Round(normal.z));
+        Debug.Log(normal);
+        if (normal == -(transform.forward))
         {
-            Vector3 normal = collision.contacts[0].normal;
-            if (normal == -(transform.forward))
-            {
-                Debug.Log("DEAD");
-                deathManager.DeadState();
-            }
+            Debug.Log("DEAD");
+            deathManager.DeadState();
+        }
 
-            else if (normal == transform.up)
-            {
-                Debug.Log("Not dead");
-                //deathManager.DeadState();
-            }
+        else if (normal == transform.up)
+        {
+            Debug.Log("Not dead");
+        }
             
-            else
-            {
-                return;
-            }
+        else
+        {
+            return;
         }
     }
 }
