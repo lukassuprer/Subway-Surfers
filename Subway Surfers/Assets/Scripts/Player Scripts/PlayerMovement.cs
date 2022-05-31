@@ -184,13 +184,13 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log(normal);
         if (normal == -(transform.forward))
         {
-            Debug.Log("DEAD");
+            //Debug.Log("DEAD");
             deathManager.DeadState();
         }
 
         else if (normal == transform.up)
         {
-            Debug.Log("Not dead");
+            //Debug.Log("Not dead");
         }
             
         else

@@ -161,7 +161,7 @@ MonoBehaviour:
   isGrounded: 0
   groundCheckObject: {fileID: 1298016893}
   barrelRollLength: 1
-  maxVelocity: 15
+  maxVelocity: 20
   isSwiping: 0
   playerAnimator: {fileID: 21894079}
   groundLayer:
@@ -333,6 +333,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &144164079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 144164081}
+  - component: {fileID: 144164080}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &144164080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144164079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc54aa720ba774e009bf1177d5e4cfff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _SaveData:
+    saves: []
+  LeaderBoardInputGameObject: {fileID: 0}
+  LeaderBoardGameObject: {fileID: 0}
+--- !u!4 &144164081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144164079}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 142.4115, y: 2.4215302, z: 250.65256}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &233135378
 GameObject:
@@ -1925,6 +1973,8 @@ MonoBehaviour:
   deathScreen: {fileID: 0}
   UIManager: {fileID: 1782038878}
   player: {fileID: 21894078}
+  SaveManager: {fileID: 144164080}
+  CoinManager: {fileID: 504130604}
 --- !u!4 &1112538940
 Transform:
   m_ObjectHideFlags: 0
@@ -3723,10 +3773,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6933e42b3f99e4683b03ffdfe66993f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _VolumeSettings: {fileID: 1782038877}
-  _DeathScreen: {fileID: 1880578461}
-  _PauseMenu: {fileID: 1704857135}
-  ScoreText: {fileID: 1856836768}
+  deathScreen: {fileID: 1880578461}
+  pauseMenu: {fileID: 1704857135}
+  scoreText: {fileID: 1856836768}
 --- !u!1 &1856836767
 GameObject:
   m_ObjectHideFlags: 0

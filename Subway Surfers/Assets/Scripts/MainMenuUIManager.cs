@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class MainMenuUIManager : MonoBehaviour
 {
-    public GameObject MainMenu;
-    public GameObject OptionsMenu;
-    public GameObject LeaderboardMenu;
+    [SerializeField]private GameObject mainMenu;
+    [SerializeField]private GameObject optionsMenu;
+    [SerializeField]private GameObject leaderboardMenu;
+    [SerializeField]private SaveManager saveManager;
     public void PlayButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -20,14 +21,21 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void OptionsButton()
     {
-        MainMenu.SetActive(false);
-        OptionsMenu.SetActive(true);
+        mainMenu.SetActive(false);
+        optionsMenu.SetActive(true);
+    }
+    
+    public void LeaderboardButton()
+    {
+        mainMenu.SetActive(false);
+        leaderboardMenu.SetActive(true);
+        saveManager.CreateLeaderboard();
     }
 
     public void BackButton()
     {
-        MainMenu.SetActive(true);
-        OptionsMenu.SetActive(false);
-        LeaderboardMenu.SetActive(false);
+        mainMenu.SetActive(true);
+        optionsMenu.SetActive(false);
+        leaderboardMenu.SetActive(false);
     }
 }

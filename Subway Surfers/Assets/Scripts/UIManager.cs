@@ -7,12 +7,11 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public VolumeSettings _VolumeSettings;
-    private GameManager gameManager;
-    public GameObject _DeathScreen;
-    public GameObject _PauseMenu;
+    private GameManager gameManager; 
+    [SerializeField]private GameObject deathScreen;
+    [SerializeField]private GameObject pauseMenu;
     private VolumeSettings volumeSettings;
-    public TextMeshProUGUI ScoreText;
+    [SerializeField]private TextMeshProUGUI scoreText;
 
     private void Start()
     {
@@ -23,7 +22,7 @@ public class UIManager : MonoBehaviour
     
     public void ScoreUpdate(int score)
     {
-        ScoreText.text = "Score: " + score;
+        scoreText.text = "Score: " + score;
     }
 
     public void MainMenuButton()
@@ -40,7 +39,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowDeathScreen(bool showMenu)
     {
-        _DeathScreen.SetActive(showMenu);
+        deathScreen.SetActive(showMenu);
     }
 
     public void PauseButton()
@@ -48,13 +47,13 @@ public class UIManager : MonoBehaviour
         if (gameManager.GamePaused)
         {
             gameManager.GamePaused = false;
-            _PauseMenu.SetActive(false);
+            pauseMenu.SetActive(false);
             Time.timeScale = 1;
         }
         else
         {
             gameManager.GamePaused = true;
-            _PauseMenu.SetActive(true);
+            pauseMenu.SetActive(true);
             Time.timeScale = 0;
         }
     }
