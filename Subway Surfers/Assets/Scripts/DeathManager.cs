@@ -8,7 +8,6 @@ public class DeathManager : MonoBehaviour
     public GameObject deathScreen;
     public UIManager UIManager;
     public GameObject player;
-    public SaveManager SaveManager;
     public CoinManager CoinManager;
 
     public void DeadState()
@@ -21,7 +20,7 @@ public class DeathManager : MonoBehaviour
     
     private void SaveScore()
     {
-        SaveManager._SaveData.saves[^1].score = CoinManager.coinCount;
-        SaveManager.SaveData();
+        SaveManager.instance._SaveData.saves[^1].score = CoinManager.coinCount;
+        //SaveManager.instance.SaveData();
     }
 }

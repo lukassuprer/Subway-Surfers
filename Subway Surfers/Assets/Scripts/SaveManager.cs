@@ -6,17 +6,19 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class SaveData
 {
-    public string username = "Lukas";
-    public int score;
+    public string username = "User";
+    public int score = 0;
 }
 [System.Serializable]
 public class SaveDataArray
 {
-    public SaveData[] saves;
+    //public SaveData[] saves;
+    public List<SaveData> saves = new List<SaveData>();
 }
 [System.Serializable]
 public class LeaderBoard
@@ -29,15 +31,27 @@ public class SaveManager : MonoBehaviour
 {
     public SaveDataArray _SaveData;
     public GameObject LeaderBoardInputGameObject;
-    public GameObject LeaderBoardGameObject;
+    private GameObject LeaderBoardGameObject;
     private string uri = "https://301.sebight.eu/api/leaderboard/VaA4Fvd2Rc";
+    public static SaveManager instance;
 
     private string savePath => $"{Application.dataPath}/PlayerData.json";
 
     private void Awake()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        MakeThisTheOnlySaveManager();
+        DontDestroyOnLoad(transform.gameObject);
         _SaveData = new SaveDataArray();
         StartCoroutine(GetRequest(uri));
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene == SceneManager.GetSceneByName("MainMenu"))
+        {
+            LeaderBoardGameObject = Resources.FindObjectsOfTypeAll<LeaderBoardObject>().FirstOrDefault().gameObject;
+        }
     }
 
     IEnumerator PostRequest(string url, string json)
@@ -57,6 +71,7 @@ public class SaveManager : MonoBehaviour
 
         yield return webRequest.SendWebRequest();
         _SaveData = JsonUtility.FromJson<SaveDataArray>("{\"saves\":" + webRequest.downloadHandler.text + "}");
+        _SaveData.saves.Add(new SaveData());
     }
 
     public void SaveData()
@@ -69,11 +84,27 @@ public class SaveManager : MonoBehaviour
     
     public void CreateLeaderboard()
     {
-        Array.Sort(_SaveData.saves, (x, y) => y.score.CompareTo(x.score));
+        //Array.Sort(_SaveData.saves, (x, y) => y.score.CompareTo(x.score));
+        foreach (Transform child in LeaderBoardGameObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (var t in _SaveData.saves)
         {
             GameObject input = Instantiate(LeaderBoardInputGameObject, LeaderBoardGameObject.transform);
             input.GetComponent<LeaderBoardInput>().SetInput(t.username, t.score);
+        }
+    }
+    
+    private void MakeThisTheOnlySaveManager(){
+        if(instance == null){
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+        }
+        else{
+            if(instance != this){
+                Destroy (gameObject);
+            }
         }
     }
 
