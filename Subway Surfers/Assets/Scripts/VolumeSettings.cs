@@ -37,7 +37,6 @@ public class VolumeSettings : MonoBehaviour
     {
         PlayerPrefs.SetFloat(AudioManager.MUSIC_KEY, musicSlider.value);
         PlayerPrefs.SetFloat(AudioManager.SFX_KEY, sfxSlider.value);
-        Debug.Log("Saved Volume");
     }
 
     private void SetMusicVolume(float value)

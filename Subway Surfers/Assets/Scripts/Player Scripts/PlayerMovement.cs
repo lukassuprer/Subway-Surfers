@@ -181,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.layer != 6) return;
         Vector3 normal = collision.contacts[0].normal;
         normal = new Vector3(Mathf.Round(normal.x), Mathf.Round(normal.y), Mathf.Round(normal.z));
-        Debug.Log(normal);
+        //Debug.Log(normal);
         if (normal == -(transform.forward))
         {
             //Debug.Log("DEAD");
@@ -191,6 +191,10 @@ public class PlayerMovement : MonoBehaviour
         else if (normal == transform.up)
         {
             //Debug.Log("Not dead");
+        }
+        else if (normal == new Vector3(0, -1, -1))
+        {
+            deathManager.DeadState();
         }
             
         else

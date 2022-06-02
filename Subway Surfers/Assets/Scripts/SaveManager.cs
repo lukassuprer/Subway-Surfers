@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -50,7 +47,7 @@ public class SaveManager : MonoBehaviour
     {
         if(scene == SceneManager.GetSceneByName("MainMenu"))
         {
-            LeaderBoardGameObject = Resources.FindObjectsOfTypeAll<LeaderBoardObject>().FirstOrDefault().gameObject;
+            LeaderBoardGameObject = Resources.FindObjectsOfTypeAll<LeaderBoardObject>().FirstOrDefault()?.gameObject;
         }
     }
 
@@ -84,12 +81,14 @@ public class SaveManager : MonoBehaviour
     
     public void CreateLeaderboard()
     {
-        //Array.Sort(_SaveData.saves, (x, y) => y.score.CompareTo(x.score));
+        List<SaveData> sortedSaves = new List<SaveData>();
+        sortedSaves.AddRange(_SaveData.saves);
+        sortedSaves.Sort((x, y) => y.score.CompareTo(x.score));
         foreach (Transform child in LeaderBoardGameObject.transform)
         {
             Destroy(child.gameObject);
         }
-        foreach (var t in _SaveData.saves)
+        foreach (var t in sortedSaves)
         {
             GameObject input = Instantiate(LeaderBoardInputGameObject, LeaderBoardGameObject.transform);
             input.GetComponent<LeaderBoardInput>().SetInput(t.username, t.score);

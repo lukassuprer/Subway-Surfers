@@ -20,9 +20,9 @@ public class UIManager : MonoBehaviour
         ShowDeathScreen(false);
     }
     
-    public void ScoreUpdate(int score)
+    public void ScoreUpdate(float score)
     {
-        scoreText.text = "Score: " + score;
+        scoreText.text = "Score: " + Mathf.Round(score);
     }
 
     public void MainMenuButton()

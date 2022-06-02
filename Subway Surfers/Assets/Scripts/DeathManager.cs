@@ -12,6 +12,7 @@ public class DeathManager : MonoBehaviour
 
     public void DeadState()
     {  
+        GameManager.Instance.GameOver = true;
         SaveScore();
         //Debug.Log("dead");
         UIManager.ShowDeathScreen(true);
@@ -20,7 +21,10 @@ public class DeathManager : MonoBehaviour
     
     private void SaveScore()
     {
-        SaveManager.instance._SaveData.saves[^1].score = CoinManager.coinCount;
-        //SaveManager.instance.SaveData();
+        if (CoinManager.coinCount > SaveManager.instance._SaveData.saves[^1].score)
+        {
+            SaveManager.instance._SaveData.saves[^1].score = (int)CoinManager.coinCount;
+            //SaveManager.instance.SaveData();
+        }
     }
 }

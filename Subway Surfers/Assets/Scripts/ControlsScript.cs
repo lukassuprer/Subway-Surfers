@@ -17,6 +17,7 @@ public class ControlsScript : MonoBehaviour
     public float deadZone = 0.2f;
     private AudioManager AudioManager;
     private GameManager gameManager;
+    public LineRenderer lineRenderer;
 
     private void Awake()
     {
@@ -44,7 +45,6 @@ public class ControlsScript : MonoBehaviour
         }
 
         MouseMovement();
-        CheckForObstacles(Vector3.right);
     }
 
     private Vector3 GetTouchPos(Touch touch)
@@ -132,6 +132,18 @@ public class ControlsScript : MonoBehaviour
 
     private bool CheckForObstacles(Vector3 direction)
     {
-        return !Physics.Raycast(playerMovement.transform.position, direction, 5f, obstacleLayer);
+        RaycastHit hit;
+        // Does the ray intersect any objects excluding the player layer
+        if (Physics.Raycast(playerMovement.transform.position + Vector3.up * 2, direction, out hit, 10f, obstacleLayer))
+        {
+            Debug.Log("Did Hit");
+            return false;
+        }
+        else
+        {
+            Debug.Log("Did not Hit");
+            return true;
+        }
+        return !Physics.Raycast(playerMovement.transform.position, direction, 10f, 6);
     }
 }
