@@ -173,6 +173,7 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(10f);
         maxVelocity += 2f;
+        fallGravity += 0.5f;
         StartCoroutine(IncreaseSpeed());
     }
 
