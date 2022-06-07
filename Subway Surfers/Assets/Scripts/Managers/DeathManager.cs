@@ -24,7 +24,7 @@ public class DeathManager : MonoBehaviour
         if (CoinManager.coinCount > SaveManager.instance._SaveData.saves[^1].score)
         {
             SaveManager.instance._SaveData.saves[^1].score = (int)CoinManager.coinCount;
-            //SaveManager.instance.SaveData();
+            SaveManager.instance.SaveData();
         }
     }
 }

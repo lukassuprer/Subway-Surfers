@@ -144,6 +144,5 @@ public class ControlsScript : MonoBehaviour
             Debug.Log("Did not Hit");
             return true;
         }
-        return !Physics.Raycast(playerMovement.transform.position, direction, 10f, 6);
     }
 }

@@ -7,32 +7,42 @@ using UnityEngine;
 public class TileGenerator : MonoBehaviour
 {
     private StartOfTile startOfTile;
-    private ObjectPooler objectPooler;
+    private ObjectPooler objectPooler; 
     public int TilesCrossed;
     private Vector3 positionToSpawn;
-    public List<GameObject> ActiveTiles = new List<GameObject>();
+    [SerializeField]private List<GameObject> activeTiles = new List<GameObject>();
+    private int numberOfTiles = 3;
+    private bool gameStarted = false;
 
     private void Start()
     {
-        startOfTile = FindObjectOfType<StartOfTile>();
         objectPooler = ObjectPooler.Instance;
-        SpawnTile();
-        SpawnTile();
-        SpawnTile();
+        objectPooler.SpawnFromPool("startTile", transform.position, Quaternion.identity);
+        transform.position +=
+            Vector3.forward * objectPooler.ObjectToSpawn.transform.GetChild(0).GetChild(0).localScale.z;
+        for (int i = 0; i < numberOfTiles; i++)
+        {
+            SpawnTile();
+        }
     }
 
     private void Update()
     {
+        if (TilesCrossed == 1 && gameStarted == false)
+        {
+            gameStarted = true;
+            TilesCrossed = 0;
+        }
         if (TilesCrossed >= 2)
         {
             SpawnTile();
             SpawnTile();
-            if (ActiveTiles.Count > 3)
+            if (activeTiles.Count > 3)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    ActiveTiles[0].SetActive(false);
-                    ActiveTiles.RemoveAt(0);
+                    activeTiles[0].SetActive(false);
+                    activeTiles.RemoveAt(0);
                 }
             }
         }
@@ -41,7 +51,7 @@ public class TileGenerator : MonoBehaviour
     private void SpawnTile()
     {
         GameObject newTile = objectPooler.SpawnFromPool("tile", transform.position, Quaternion.identity);
-        ActiveTiles.Add(newTile);
+        activeTiles.Add(newTile);
         transform.position +=
             Vector3.forward * objectPooler.ObjectToSpawn.transform.GetChild(0).GetChild(0).localScale.z;
         //Spawn at start 1 tile then move manager to that pos and then add + 100 on z and then spawn another ....

@@ -417,6 +417,10 @@ MonoBehaviour:
     - {fileID: 1558626802483509233, guid: 98708075f580e4dcc9b86380683a8904, type: 3}
     - {fileID: 1558626802483509233, guid: df1fdcb079bd94bc188f9ff94878f580, type: 3}
     size: 2
+  - tag: startTile
+    prefabList:
+    - {fileID: 1950086055851421360, guid: 87fb43bc82f1b5f46a6518644a9694a6, type: 3}
+    size: 1
   ObjectToSpawn: {fileID: 0}
 --- !u!4 &46631360
 Transform:
@@ -1343,7 +1347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TilesCrossed: 0
-  ActiveTiles: []
+  activeTiles: []
 --- !u!4 &719676440
 Transform:
   m_ObjectHideFlags: 0
@@ -2023,7 +2027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b45d88fb6394cbfb751d874ce075f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathScreen: {fileID: 0}
+  deathScreen: {fileID: 1880578461}
   UIManager: {fileID: 1782038878}
   player: {fileID: 21894078}
   CoinManager: {fileID: 504130604}
