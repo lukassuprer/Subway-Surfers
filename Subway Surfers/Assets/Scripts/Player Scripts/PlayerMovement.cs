@@ -189,6 +189,7 @@ public class PlayerMovement : MonoBehaviour
         {
             //Debug.Log("DEAD");
             deathManager.DeadState();
+            AudioManager.Instance.Play("Hit");
         }
 
         else if (normal == transform.up)
