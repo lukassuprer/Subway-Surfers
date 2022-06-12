@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 public class CoinManager : MonoBehaviour
 {
-    public float coinCount;
+    public float CoinCount;
     public UIManager UIManager;
     [SerializeField]private float scorePerSecond = 1f;
 
@@ -17,8 +17,8 @@ public class CoinManager : MonoBehaviour
         }
         if (!GameManager.Instance.GamePaused)
         {
-            coinCount += scorePerSecond * Time.deltaTime;
+            CoinCount += scorePerSecond * Time.deltaTime;
         }
-        UIManager.ScoreUpdate(coinCount);
+        UIManager.ScoreUpdate(CoinCount);
     }
 }

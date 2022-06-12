@@ -5,10 +5,11 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     private GameManager gameManager; 
+    private VolumeSettings volumeSettings;
     [SerializeField]private GameObject deathScreen;
     [SerializeField]private GameObject pauseMenu;
-    private VolumeSettings volumeSettings;
     [SerializeField]private TextMeshProUGUI scoreText;
+    [SerializeField]private TextMeshProUGUI livesCounter;
 
     private void Start()
     {
@@ -53,5 +54,10 @@ public class UIManager : MonoBehaviour
             pauseMenu.SetActive(true);
             Time.timeScale = 0;
         }
+    }
+    
+    public void LivesUpdate(int lives)
+    {
+        livesCounter.text = lives.ToString();
     }
 }

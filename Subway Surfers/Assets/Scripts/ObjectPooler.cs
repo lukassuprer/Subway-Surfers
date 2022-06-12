@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ObjectPooler : MonoBehaviour
 {
@@ -12,13 +13,12 @@ public class ObjectPooler : MonoBehaviour
 
         public List<GameObject> prefabList = new List<GameObject>();
 
-        //public GameObject prefab;
         public int size;
     }
 
     public static ObjectPooler Instance;
-    public List<Pool> pools = new List<Pool>();
-    public Dictionary<string, Queue<GameObject>> poolDictionary;
+    [SerializeField]private List<Pool> pools = new List<Pool>();
+    private Dictionary<string, Queue<GameObject>> poolDictionary;
     public GameObject ObjectToSpawn;
 
     void Awake()

@@ -1,35 +1,37 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security;
 using DG.Tweening;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Rigidbody playerRigidbody;
-    public float velocity = 10f;
-    public List<Transform> trailsList = new List<Transform>();
-    public int currentPosition;
-    public float jumpHeight = 10f;
-    public bool isGrounded;
-    public GameObject groundCheckObject;
-    public float barrelRollLength = 1f;
-    public float maxVelocity;
-    public bool isSwiping;
-    public Animator playerAnimator;
-    public LayerMask groundLayer;
+    private int currentPosition;
+    public List<Transform> TrailsList = new List<Transform>();
+    [SerializeField]private GameObject groundCheckObject;
+    
+    [HideInInspector]
+    public bool IsGrounded, IsSwiping;
+    
+    private Rigidbody playerRigidbody;
+    private Animator playerAnimator;
     private DeathManager deathManager;
-    public float changeTrailTime = 0.5f;
-    public float fallGravity = 5.0f;
-    public LayerMask Obstacle;
-
+    
+    [SerializeField]private float velocity = 10f;
+    [SerializeField]private float jumpHeight = 10f;
+    [SerializeField]private float barrelRollLength = 1f;
+    [SerializeField]private float changeTrailTime = 0.5f;
+    [SerializeField]private float fallGravity = 5.0f;
+    [SerializeField]private float maxVelocity;
+    
+    [SerializeField]private LayerMask groundLayer;
+    [SerializeField]private LayerMask obstacle;
     private void Start()
     {
         currentPosition = 1;
         StartCoroutine(IncreaseSpeed());
         deathManager = FindObjectOfType<DeathManager>();
+        playerRigidbody = GetComponent<Rigidbody>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -49,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
             playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
         }
 
-        if (isGrounded)
+        if (IsGrounded)
         {
             this.highPt = false;
         }
@@ -66,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool("isJumping", false);
         CapsuleCollider capsuleCollider = transform.GetComponent<CapsuleCollider>();
         playerAnimator.SetBool("isScrolling", true);
-        if (!isGrounded)
+        if (!IsGrounded)
         {
             playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
         }
@@ -82,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
     public void Jump()
     {
         GroundCheck();
-        if (isGrounded)
+        if (IsGrounded)
         {
             StartCoroutine(JumpAnimation());
         }
@@ -93,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool("isJumping", true);
         playerRigidbody.AddForce(Vector3.up * jumpHeight);
         yield return new WaitForSeconds(0.5f);
-        yield return new WaitUntil(() => isGrounded);
+        yield return new WaitUntil(() => IsGrounded);
         playerAnimator.SetBool("isJumping", false);
     }
 
@@ -103,15 +105,15 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(groundCheckObject.transform.position, Vector3.down, out hit, 0.2f, groundLayer))
         {
-            isGrounded = true;
+            IsGrounded = true;
         }
-        else if (Physics.Raycast(groundCheckObject.transform.position, Vector3.down, out hit, 0.2f, Obstacle))
+        else if (Physics.Raycast(groundCheckObject.transform.position, Vector3.down, out hit, 0.2f, obstacle))
         {
-            isGrounded = true;
+            IsGrounded = true;
         }
         else
         {
-            isGrounded = false;
+            IsGrounded = false;
         }
     }
     
@@ -119,12 +121,12 @@ public class PlayerMovement : MonoBehaviour
     {
         float currentVerticalSpeed = playerRigidbody.velocity.y;
      
-        if(isGrounded)
+        if(IsGrounded)
         {
             if(currentVerticalSpeed < 0f)
                 currentVerticalSpeed = 0f;
         }
-        else if(!isGrounded)
+        else if(!IsGrounded)
         {
             currentVerticalSpeed -= fallGravity * Time.deltaTime;
         }
@@ -139,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         {
             //Debug.Log("far left");
         }
-        else if (currentPosition + move > trailsList.Count - 1)
+        else if (currentPosition + move > TrailsList.Count - 1)
         {
             //Debug.Log("far right");
         }
@@ -160,11 +162,11 @@ public class PlayerMovement : MonoBehaviour
             playerAnimator.SetBool("goingLeft", true);
         }
 
-        isSwiping = true;
-        transform.DOMoveX(trailsList[currentPosition + move].position.x, changeTrailTime);
+        IsSwiping = true;
+        transform.DOMoveX(TrailsList[currentPosition + move].position.x, changeTrailTime);
         currentPosition += move;
         yield return new WaitForSeconds(0.5f);
-        isSwiping = false;
+        IsSwiping = false;
         playerAnimator.SetBool("goingLeft", false);
         playerAnimator.SetBool("goingRight", false);
     }

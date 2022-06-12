@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CoinScript : MonoBehaviour, IPooledObject
 {
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] private Rigidbody rigidBody;
     private CoinManager coinManager;
     private AudioManager audioManager;
 
@@ -17,7 +17,7 @@ public class CoinScript : MonoBehaviour, IPooledObject
 
     private void Update()
     {
-        rb.AddTorque(0, 1, 0, ForceMode.Impulse);
+        rigidBody.AddTorque(0, 1, 0, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,7 +26,7 @@ public class CoinScript : MonoBehaviour, IPooledObject
         {
             audioManager.PlayCoinSound();
             gameObject.SetActive(false);
-            coinManager.coinCount++;
+            coinManager.CoinCount++;
         }
     }
 }

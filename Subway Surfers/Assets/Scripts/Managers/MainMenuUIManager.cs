@@ -25,7 +25,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void SubmitButton()
     {
-        SaveManager.instance._SaveData.saves[^1].username = usernameInput.text;
+        SaveManager.Instance.SaveDataArray.saves[^1].username = usernameInput.text;
     }
 
     public void OptionsButton()
@@ -38,7 +38,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         mainMenu.SetActive(false);
         leaderboardMenu.SetActive(true);
-        SaveManager.instance.CreateLeaderboard();
+        SaveManager.Instance.CreateLeaderboard();
     }
 
     public void BackButton()

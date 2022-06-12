@@ -26,11 +26,11 @@ public class LeaderBoard
 
 public class SaveManager : MonoBehaviour
 {
-    public SaveDataArray _SaveData;
+    public SaveDataArray SaveDataArray;
     public GameObject LeaderBoardInputGameObject;
-    private GameObject LeaderBoardGameObject;
+    private GameObject leaderBoardGameObject;
     private string uri = "https://301.sebight.eu/api/leaderboard/VaA4Fvd2Rc";
-    public static SaveManager instance;
+    public static SaveManager Instance;
 
     private string savePath => $"{Application.dataPath}/PlayerData.json";
 
@@ -39,7 +39,7 @@ public class SaveManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         MakeThisTheOnlySaveManager();
         DontDestroyOnLoad(transform.gameObject);
-        _SaveData = new SaveDataArray();
+        SaveDataArray = new SaveDataArray();
         StartCoroutine(GetRequest(uri));
     }
 
@@ -47,7 +47,7 @@ public class SaveManager : MonoBehaviour
     {
         if(scene == SceneManager.GetSceneByName("MainMenu"))
         {
-            LeaderBoardGameObject = Resources.FindObjectsOfTypeAll<LeaderBoardObject>().FirstOrDefault()?.gameObject;
+            leaderBoardGameObject = Resources.FindObjectsOfTypeAll<LeaderBoardObject>().FirstOrDefault()?.gameObject;
         }
     }
 
@@ -67,14 +67,14 @@ public class SaveManager : MonoBehaviour
         using UnityWebRequest webRequest = UnityWebRequest.Get(url);
 
         yield return webRequest.SendWebRequest();
-        _SaveData = JsonUtility.FromJson<SaveDataArray>("{\"saves\":" + webRequest.downloadHandler.text + "}");
-        _SaveData.saves.Add(new SaveData());
+        SaveDataArray = JsonUtility.FromJson<SaveDataArray>("{\"saves\":" + webRequest.downloadHandler.text + "}");
+        SaveDataArray.saves.Add(new SaveData());
     }
 
     public void SaveData()
     {
         LeaderBoard leaderboard = new LeaderBoard();
-        leaderboard.leaderboard = _SaveData.saves[^1];
+        leaderboard.leaderboard = SaveDataArray.saves[^1];
         Debug.Log(JsonUtility.ToJson(leaderboard));
         StartCoroutine(PostRequest(uri, JsonUtility.ToJson(leaderboard)));
     }
@@ -82,33 +82,33 @@ public class SaveManager : MonoBehaviour
     public void CreateLeaderboard()
     {
         List<SaveData> sortedSaves = new List<SaveData>();
-        sortedSaves.AddRange(_SaveData.saves);
+        sortedSaves.AddRange(SaveDataArray.saves);
         sortedSaves.Sort((x, y) => y.score.CompareTo(x.score));
-        foreach (Transform child in LeaderBoardGameObject.transform)
+        foreach (Transform child in leaderBoardGameObject.transform)
         {
             Destroy(child.gameObject);
         }
         foreach (var t in sortedSaves)
         {
-            GameObject input = Instantiate(LeaderBoardInputGameObject, LeaderBoardGameObject.transform);
+            GameObject input = Instantiate(LeaderBoardInputGameObject, leaderBoardGameObject.transform);
             input.GetComponent<LeaderBoardInput>().SetInput(t.username, t.score);
         }
     }
     
     private void MakeThisTheOnlySaveManager(){
-        if(instance == null){
+        if(Instance == null){
             DontDestroyOnLoad(gameObject);
-            instance = this;
+            Instance = this;
         }
         else{
-            if(instance != this){
+            if(Instance != this){
                 Destroy (gameObject);
             }
         }
     }
 
-    /*private void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         SaveData();
-    }*/
+    }
 }

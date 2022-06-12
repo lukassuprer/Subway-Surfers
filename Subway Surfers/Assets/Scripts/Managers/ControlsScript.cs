@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class ControlsScript : MonoBehaviour
@@ -10,28 +11,33 @@ public class ControlsScript : MonoBehaviour
     private float screenHeight;
     private Vector3 startPosition;
     private Vector3 endPosition;
-    public PlayerMovement playerMovement;
-    public LayerMask obstacleLayer;
-    private int obstaclesHit;
+    
+    private PlayerMovement playerMovement;
     private DeathManager deathManager;
-    public float deadZone = 0.2f;
-    private AudioManager AudioManager;
-    private GameManager gameManager;
-    public LineRenderer lineRenderer;
+    private AudioManager audioManager;
+    
+    [SerializeField]private  LayerMask obstacleLayer;
+    
+    private int obstaclesHit;
+    [SerializeField]private  float deadZone = 0.2f;
+    
+    [SerializeField] private GameObject gotHitScreen;
+
 
     private void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        deathManager = FindObjectOfType<DeathManager>();
+        audioManager = FindObjectOfType<AudioManager>();
+        playerMovement = FindObjectOfType<PlayerMovement>();
+        
         screenWidth = Screen.width;
         screenHeight = Screen.height;
         startPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        deathManager = FindObjectOfType<DeathManager>();
-        AudioManager = FindObjectOfType<AudioManager>();
     }
 
     private void Update()
     {
-        if (Input.touchCount > 0 && gameManager.GamePaused == false) 
+        if (Input.touchCount > 0 && GameManager.Instance.GamePaused == false)
         {
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
@@ -45,6 +51,16 @@ public class ControlsScript : MonoBehaviour
         }
 
         MouseMovement();
+
+        if (gotHitScreen != null)
+        {
+            if (gotHitScreen.GetComponent<Image>().color.a > 0)
+            {
+                var color = gotHitScreen.GetComponent<Image>().color;
+                color.a -= 0.01f;
+                gotHitScreen.GetComponent<Image>().color = color;
+            }
+        }
     }
 
     private Vector3 GetTouchPos(Touch touch)
@@ -65,11 +81,11 @@ public class ControlsScript : MonoBehaviour
 
     private void MouseMovement()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && gameManager.GamePaused == false)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.Instance.GamePaused == false)
         {
             startPosition = GetMousePos();
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse0) && gameManager.GamePaused == false)
+        else if (Input.GetKeyUp(KeyCode.Mouse0) && GameManager.Instance.GamePaused == false)
         {
             endPosition = GetMousePos();
 
@@ -81,30 +97,30 @@ public class ControlsScript : MonoBehaviour
 
     private void Move(float x, float y)
     {
-        if (x > deadZone && gameManager.GamePaused == false)
+        if (x > deadZone && GameManager.Instance.GamePaused == false)
         {
             if (CheckForObstacles(Vector3.right))
             {
-                AudioManager.Play("Swipe");
+                audioManager.Play("Swipe");
                 playerMovement.MovePosition(1);
             }
             else
             {
                 obstaclesHit++;
-                playerMovement.isSwiping = true;
+                playerMovement.IsSwiping = true;
             }
         }
-        else if (x < -deadZone && gameManager.GamePaused == false)
+        else if (x < -deadZone && GameManager.Instance.GamePaused == false)
         {
             if (CheckForObstacles(Vector3.left))
             {
-                AudioManager.Play("Swipe");
+                audioManager.Play("Swipe");
                 playerMovement.MovePosition(-1);
             }
             else
             {
                 obstaclesHit++;
-                playerMovement.isSwiping = true;
+                playerMovement.IsSwiping = true;
             }
         }
 
@@ -113,21 +129,21 @@ public class ControlsScript : MonoBehaviour
             deathManager.DeadState();
         }
 
-        if (!playerMovement.isSwiping && gameManager.GamePaused == false)
+        if (!playerMovement.IsSwiping && GameManager.Instance.GamePaused == false)
         {
             playerMovement.GroundCheck();
-            if (y > 0 && playerMovement.isGrounded)
+            if (y > 0 && playerMovement.IsGrounded)
             {
-                AudioManager.Play("SwipeUp");
+                audioManager.Play("SwipeUp");
                 playerMovement.Jump();
             }
             else if (y < 0)
             {
-                AudioManager.Play("SwipeDown");
+                audioManager.Play("SwipeDown");
                 playerMovement.Crouch();
             }
         }
-        playerMovement.isSwiping = false;
+        playerMovement.IsSwiping = false;
     }
 
     private bool CheckForObstacles(Vector3 direction)
@@ -136,13 +152,23 @@ public class ControlsScript : MonoBehaviour
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(playerMovement.transform.position + Vector3.up * 2, direction, out hit, 10f, obstacleLayer))
         {
-            Debug.Log("Did Hit");
+            //Debug.Log("Did Hit");
+            GotHit();
             return false;
         }
         else
         {
-            Debug.Log("Did not Hit");
+            //Debug.Log("Did not Hit");
             return true;
         }
+    }
+
+    private void GotHit()
+    {
+        audioManager.Play("Hit");
+        var color = gotHitScreen.GetComponent<Image>().color;
+        color.a = 0.8f;
+        gotHitScreen.GetComponent<Image>().color = color;
+        GameManager.Instance.DecreaseHealth();
     }
 }

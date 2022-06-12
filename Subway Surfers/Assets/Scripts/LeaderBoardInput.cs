@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class LeaderBoardInput : MonoBehaviour
 {
-    public TextMeshProUGUI username;
-    public TextMeshProUGUI score;
+    [SerializeField]private  TextMeshProUGUI username;
+    [SerializeField]private  TextMeshProUGUI score;
     
     public void SetInput(string username, int score)
     {

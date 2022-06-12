@@ -8,6 +8,7 @@ public class TileGenerator : MonoBehaviour
 {
     private StartOfTile startOfTile;
     private ObjectPooler objectPooler; 
+    
     public int TilesCrossed;
     private Vector3 positionToSpawn;
     [SerializeField]private List<GameObject> activeTiles = new List<GameObject>();
@@ -17,9 +18,11 @@ public class TileGenerator : MonoBehaviour
     private void Start()
     {
         objectPooler = ObjectPooler.Instance;
-        objectPooler.SpawnFromPool("startTile", transform.position, Quaternion.identity);
-        transform.position +=
+        var position = transform.position;
+        objectPooler.SpawnFromPool("startTile", position, Quaternion.identity);
+        position +=
             Vector3.forward * objectPooler.ObjectToSpawn.transform.GetChild(0).GetChild(0).localScale.z;
+        transform.position = position;
         for (int i = 0; i < numberOfTiles; i++)
         {
             SpawnTile();
@@ -39,22 +42,30 @@ public class TileGenerator : MonoBehaviour
             SpawnTile();
             if (activeTiles.Count > 3)
             {
-                for (int i = 0; i < 2; i++)
-                {
-                    activeTiles[0].SetActive(false);
-                    activeTiles.RemoveAt(0);
-                }
+                StartCoroutine(EraseTiles());
             }
         }
     }
 
     private void SpawnTile()
     {
-        GameObject newTile = objectPooler.SpawnFromPool("tile", transform.position, Quaternion.identity);
+        var position = transform.position;
+        GameObject newTile = objectPooler.SpawnFromPool("tile", position, Quaternion.identity);
         activeTiles.Add(newTile);
-        transform.position +=
+        position +=
             Vector3.forward * objectPooler.ObjectToSpawn.transform.GetChild(0).GetChild(0).localScale.z;
+        transform.position = position;
         //Spawn at start 1 tile then move manager to that pos and then add + 100 on z and then spawn another ....
         TilesCrossed = 0;
+    }
+    
+    private IEnumerator EraseTiles()
+    {
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < 2; i++)
+        {
+            activeTiles[0].SetActive(false);
+            activeTiles.RemoveAt(0);
+        }
     }
 }
