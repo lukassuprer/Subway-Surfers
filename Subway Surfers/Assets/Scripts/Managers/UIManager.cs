@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     
     public void ScoreUpdate(float score)
     {
-        scoreText.text = "Score: " + Mathf.Round(score);
+        scoreText.text = Mathf.Round(score).ToString();
     }
 
     public void MainMenuButton()
