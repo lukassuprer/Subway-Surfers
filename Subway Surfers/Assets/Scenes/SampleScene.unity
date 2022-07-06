@@ -618,6 +618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GamePaused: 0
   GameOver: 0
+  uiManager: {fileID: 1782038878}
 --- !u!4 &336046023
 Transform:
   m_ObjectHideFlags: 0
@@ -2399,6 +2400,7 @@ MonoBehaviour:
   uiManager: {fileID: 1782038878}
   player: {fileID: 1660052768018732819}
   coinManager: {fileID: 504130604}
+  playerMovement: {fileID: 21894081}
 --- !u!4 &1112538940
 Transform:
   m_ObjectHideFlags: 0
@@ -3142,70 +3144,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - clip: {fileID: 8300000, guid: 65e04925b4367964f8c3faec9e249547, type: 3}
-    name: Theme
-    volume: 1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-    group: {fileID: -7484382405561615111, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: f23ec8a271426a146a18fc59c8a398e3, type: 3}
-    name: Swipe
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: e704be943aab14c46b176eab30a6d94f, type: 3}
-    name: SwipeUp
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: 250f51ceb7f6b594da08f94c5a2e3091, type: 3}
-    name: SwipeDown
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: ddcadca6e7044ba43999e964062f3e6d, type: 3}
-    name: Hit
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
   coinSounds:
-  - clip: {fileID: 8300000, guid: 51b833f39b952ee4bb8c05c9a5dee579, type: 3}
-    name: EatCoin
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: 4c1c2d74cd9af4148aeaa9b064f34ae0, type: 3}
-    name: EatCoin
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: b75239d9b0194164e9f50c2184e07226, type: 3}
-    name: EatCoin02
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
-  - clip: {fileID: 8300000, guid: 4a6066ce35d832f408ce2531a2f84c40, type: 3}
-    name: EatCoin03
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-    group: {fileID: -6526519188542375885, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
+  - Clip: {fileID: 0}
+    Name: 
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Source: {fileID: 0}
+    Group: {fileID: 0}
   mixer: {fileID: 24100000, guid: 050cc582c7dc34744859ebf328a86b02, type: 2}
 --- !u!1 &1704857135
 GameObject:

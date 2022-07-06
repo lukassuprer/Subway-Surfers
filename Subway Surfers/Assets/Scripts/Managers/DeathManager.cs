@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DeathManager : MonoBehaviour
@@ -9,6 +6,7 @@ public class DeathManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
     [SerializeField] private GameObject player;
     [SerializeField] private CoinManager coinManager;
+    [SerializeField] private PlayerMovement playerMovement;
 
     public void DeadState()
     {
@@ -16,7 +14,7 @@ public class DeathManager : MonoBehaviour
         GameManager.Instance.DecreaseHealth();
         SaveScore();
         uiManager.ShowDeathScreen(true);
-        player.GetComponent<PlayerMovement>().enabled = false;
+        playerMovement.enabled = false;
     }
 
     private void SaveScore()

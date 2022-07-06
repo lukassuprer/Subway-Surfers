@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -25,7 +21,10 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void SubmitButton()
     {
-        SaveManager.Instance.SaveDataArray.saves[^1].username = usernameInput.text;
+        if (SaveManager.Instance.SaveDataArray.saves.Count > 0)
+        {
+            SaveManager.Instance.SaveDataArray.saves[^1].username = usernameInput.text;
+        }
     }
 
     public void OptionsButton()

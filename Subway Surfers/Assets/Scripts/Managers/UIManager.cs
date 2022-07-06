@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    private GameManager gameManager; 
+    private GameManager gameManager;
     private VolumeSettings volumeSettings;
-    [SerializeField]private GameObject deathScreen;
-    [SerializeField]private GameObject pauseMenu;
-    [SerializeField]private TextMeshProUGUI scoreText;
-    [SerializeField]private TextMeshProUGUI livesCounter;
+    [SerializeField] private GameObject deathScreen;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI livesCounter;
 
     private void Start()
     {
@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
         volumeSettings = FindObjectOfType<VolumeSettings>();
         ShowDeathScreen(false);
     }
-    
+
     public void ScoreUpdate(float score)
     {
         scoreText.text = Mathf.Round(score).ToString();
@@ -42,20 +42,20 @@ public class UIManager : MonoBehaviour
 
     public void PauseButton()
     {
-        if (gameManager.GamePaused)
+        bool paused = gameManager.GamePaused;
+        if (paused)
         {
-            gameManager.GamePaused = false;
-            pauseMenu.SetActive(false);
             Time.timeScale = 1;
         }
         else
         {
-            gameManager.GamePaused = true;
-            pauseMenu.SetActive(true);
             Time.timeScale = 0;
         }
+
+        gameManager.GamePaused = !paused;
+        pauseMenu.SetActive(!paused);
     }
-    
+
     public void LivesUpdate(int lives)
     {
         livesCounter.text = lives.ToString();

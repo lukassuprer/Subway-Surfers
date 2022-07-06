@@ -1,31 +1,30 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    [SerializeField]private Sound[] sounds;
-    [SerializeField]private  Sound[] coinSounds;
+    [SerializeField] private Sound[] sounds;
+    [SerializeField] private Sound[] coinSounds;
     [SerializeField] private AudioMixer mixer;
-    
+
     public const string MUSIC_KEY = "musicVolume";
     public const string SFX_KEY = "sfxVolume";
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            
+
             DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+
         LoadVolume();
         AttachValues(sounds);
         AttachValues(coinSounds);
@@ -35,41 +34,45 @@ public class AudioManager : MonoBehaviour
     {
         Play("Theme");
     }
+
     private void AttachValues(Sound[] values)
     {
         foreach (Sound s in values)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            
-            s.source.clip = s.clip;
-            s.source.volume = s.volume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
-            s.source.outputAudioMixerGroup = s.group;
+            s.Source = gameObject.AddComponent<AudioSource>();
+
+            s.Source.clip = s.Clip;
+            s.Source.volume = s.Volume;
+            s.Source.pitch = s.Pitch;
+            s.Source.loop = s.Loop;
+            s.Source.outputAudioMixerGroup = s.Group;
         }
     }
 
 
     public void Play(string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
+        Sound s = Array.Find(sounds, sound => sound.Name == name);
         if (s == null)
         {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
-        s.source.Play();
+
+        s.Source.Play();
     }
+
     public void PlayCoinSound()
-    {    
-        string name = coinSounds[(UnityEngine.Random.Range(0, coinSounds.Length - 1))].name;
-        Sound s = Array.Find(coinSounds, sound => sound.name == name);
+    {
+        string name = coinSounds[(UnityEngine.Random.Range(0, coinSounds.Length - 1))].Name;
+        Sound s = Array.Find(coinSounds, sound => sound.Name == name);
         if (s == null)
         {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
-        s.source.Play();
+
+        s.Source.Play();
     }
 
     private void LoadVolume() //From volume settings

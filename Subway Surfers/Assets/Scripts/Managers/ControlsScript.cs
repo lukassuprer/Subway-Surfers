@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -32,7 +28,7 @@ public class ControlsScript : MonoBehaviour
         
         screenWidth = Screen.width;
         screenHeight = Screen.height;
-        startPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        startPosition = Vector3.zero;
     }
 
     private void Update()

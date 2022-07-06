@@ -25,6 +25,12 @@ public class PlayerMovement : MonoBehaviour
     
     [SerializeField]private LayerMask groundLayer;
     [SerializeField]private LayerMask obstacle;
+    
+    private readonly Vector3 barrelRollCenter = new Vector3(0, 0.22f, 0);
+    private readonly Vector3 normalCenter = new Vector3(0.05f, 0.50f, 0.02f);
+    private const float crouchShrink = 0.5f;
+    private const float normalShrink = 1f;
+
     private void Start()
     {
         currentPosition = 1;
@@ -73,11 +79,11 @@ public class PlayerMovement : MonoBehaviour
             playerRigidbody.AddForce(Vector3.down * fallGravity, ForceMode.Impulse);
         }
 
-        capsuleCollider.height = 0.5f;
-        capsuleCollider.center = new Vector3(0, 0.22f, 0);
+        capsuleCollider.height = crouchShrink;
+        capsuleCollider.center = barrelRollCenter;
         yield return new WaitForSeconds(barrelRollLength);
-        capsuleCollider.height = 1f;
-        capsuleCollider.center = new Vector3(0.05f, 0.50f, 0.02f);
+        capsuleCollider.height = normalShrink;
+        capsuleCollider.center = normalCenter;
         playerAnimator.SetBool("isScrolling", false);
     }
 

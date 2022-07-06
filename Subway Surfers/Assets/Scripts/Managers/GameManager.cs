@@ -1,16 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public bool GamePaused = false;
-    public static GameManager Instance;
     public bool GameOver = false;
-    private UIManager uiManager;
+    public static GameManager Instance;
+    [SerializeField] private UIManager uiManager;
     private int lives = 3;
-    
+
     private void Awake()
     {
         if (Instance == null)
@@ -21,11 +18,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        uiManager = FindObjectOfType<UIManager>();
     }
 
     public void DecreaseHealth()

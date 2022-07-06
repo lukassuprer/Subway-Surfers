@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CoinScript : MonoBehaviour, IPooledObject
@@ -8,6 +5,7 @@ public class CoinScript : MonoBehaviour, IPooledObject
     [SerializeField] private Rigidbody rigidBody;
     private CoinManager coinManager;
     private AudioManager audioManager;
+    public string CollisionObjectName = "Player";
 
     public void OnObjectSpawn()
     {
@@ -22,7 +20,7 @@ public class CoinScript : MonoBehaviour, IPooledObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag(CollisionObjectName))
         {
             audioManager.PlayCoinSound();
             gameObject.SetActive(false);

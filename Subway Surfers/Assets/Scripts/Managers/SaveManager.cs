@@ -11,12 +11,14 @@ public class SaveData
     public string username = "User";
     public int score = 0;
 }
+
 [System.Serializable]
 public class SaveDataArray
 {
     //public SaveData[] saves;
     public List<SaveData> saves = new List<SaveData>();
 }
+
 [System.Serializable]
 public class LeaderBoard
 {
@@ -45,7 +47,7 @@ public class SaveManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scene == SceneManager.GetSceneByName("MainMenu"))
+        if (scene == SceneManager.GetSceneByName("MainMenu"))
         {
             leaderBoardGameObject = Resources.FindObjectsOfTypeAll<LeaderBoardObject>().FirstOrDefault()?.gameObject;
         }
@@ -57,6 +59,7 @@ public class SaveManager : MonoBehaviour
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
         request.uploadHandler = new UploadHandlerRaw(jsonToSend);
         request.downloadHandler = new DownloadHandlerBuffer();
+        request.uploadHandler.Dispose();
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
@@ -78,7 +81,7 @@ public class SaveManager : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(leaderboard));
         StartCoroutine(PostRequest(uri, JsonUtility.ToJson(leaderboard)));
     }
-    
+
     public void CreateLeaderboard()
     {
         List<SaveData> sortedSaves = new List<SaveData>();
@@ -88,21 +91,26 @@ public class SaveManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
         foreach (var t in sortedSaves)
         {
             GameObject input = Instantiate(LeaderBoardInputGameObject, leaderBoardGameObject.transform);
             input.GetComponent<LeaderBoardInput>().SetInput(t.username, t.score);
         }
     }
-    
-    private void MakeThisTheOnlySaveManager(){
-        if(Instance == null){
+
+    private void MakeThisTheOnlySaveManager()
+    {
+        if (Instance == null)
+        {
             DontDestroyOnLoad(gameObject);
             Instance = this;
         }
-        else{
-            if(Instance != this){
-                Destroy (gameObject);
+        else
+        {
+            if (Instance != this)
+            {
+                Destroy(gameObject);
             }
         }
     }
